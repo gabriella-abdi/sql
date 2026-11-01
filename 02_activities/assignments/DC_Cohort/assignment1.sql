@@ -107,10 +107,10 @@ LIMIT 24;
 /* 1. Write a query that determines how many times each vendor has rented a booth 
 at the farmer’s market by counting the vendor booth assignments per vendor_id. */
 --QUERY 8
-
-
-
-
+SELECT vendor_id,
+	count(*) AS booth_rentals
+FROM vendor_booth_assignments
+GROUP BY vendor_id;
 --END QUERY
 
 
@@ -120,10 +120,19 @@ of customers for them to give stickers to, sorted by last name, then first name.
 
 HINT: This query requires you to join two tables, use an aggregate function, and use the HAVING keyword. */
 --QUERY 9
-
-
-
-
+SELECT customer.customer_id,
+				  customer.customer_first_name,
+				  customer.customer_last_name,
+SUM(customer_purchases.quantity * customer_purchases.cost_per_quantity) AS total_spent
+FROM customer
+INNER JOIN customer_purchases
+ON customer.customer_id = customer_purchases.customer_id
+GROUP BY customer.customer_id,
+					   customer.customer_first_name,
+					   customer.customer_last_name
+HAVING SUM(customer_purchases.quantity * customer_purchases.cost_per_quantity) > 2000
+ORDER BY customer.customer_last_name,
+					   customer.customer_first_name;
 --END QUERY
 
 
@@ -138,10 +147,18 @@ When inserting the new vendor, you need to appropriately align the columns to be
 -> To insert the new row use VALUES, specifying the value you want for each column:
 VALUES(col1,col2,col3,col4,col5) 
 */
---QUERY 10
+-- QUERY 10
+CREATE TEMP TABLE new_vendor AS
+SELECT *
+FROM vendor;
 
+INSERT INTO new_vendor
+(vendor_id, vendor_name, vendor_type, vendor_owner_first_name, vendor_owner_last_name)
+VALUES
+(10, 'Thomass Superfood Store', 'Fresh Focused', 'Thomas',  'Rosenthal');
 
-
+-- SELECT * 
+-- FROM new_vendor;
 
 --END QUERY
 
@@ -153,10 +170,11 @@ HINT: you might need to search for strfrtime modifers sqlite on the web to know 
 and year are! 
 Limit to 25 rows of output. */
 --QUERY 11
-
-
-
-
+SELECT customer_id,
+	STRFTIME('%m' , market_date) AS month,
+	STRFTIME('%Y' , market_date) AS year
+FROM customer_purchases
+LIMIT 25;
 --END QUERY
 
 
@@ -167,8 +185,10 @@ HINTS: you will need to AGGREGATE, GROUP BY, and filter...
 but remember, STRFTIME returns a STRING for your WHERE statement...
 AND be sure you remove the LIMIT from the previous query before aggregating!! */
 --QUERY 12
-
-
-
-
+SELECT customer_id,
+	SUM(quantity * cost_per_quantity) AS total_spent
+FROM customer_purchases
+	WHERE STRFTIME('%m' , market_date) = '04'
+		AND STRFTIME('%Y' , market_date) = '2022'
+GROUP BY customer_id;
 --END QUERY
