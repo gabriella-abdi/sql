@@ -48,7 +48,7 @@ DENSE_RANK() OVER (
     PARTITION BY customer_id
     ORDER BY market_date ASC) AS visit
 FROM customer_purchases
-WHERE market_date < '2022-04-09';
+WHERE market_date < '2022-04-29';
 
 
 --END QUERY
