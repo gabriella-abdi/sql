@@ -263,8 +263,18 @@ Finally, make sure you have a WHERE statement to update the right row,
 When you have all of these components, you can run the update statement. */
 --QUERY 12
 
+ALTER TABLE product_units
+ADD current_quantity INT;
 
-
+UPDATE product_units
+SET current_quantity = COALESCE ((
+	SELECT vi.quantity
+	FROM vendor_inventory AS vi
+	WHERE vi.product_id = product_units.product_id
+	ORDER BY  vi.market_date DESC
+	LIMIT 1
+	), 0
+);
 
 --END QUERY
 
