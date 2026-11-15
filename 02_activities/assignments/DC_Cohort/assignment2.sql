@@ -137,8 +137,30 @@ HINT: There are a possibly a few ways to do this query, but if you're struggling
 with a UNION binding them. */
 --QUERY 7
 
+WITH daily_sales AS (
+	SELECT 
+		market_date,
+		SUM(quantity * cost_per_quantity) AS total_sales
+	FROM customer_purchases
+	GROUP BY market_date
+),
+ranking AS (
+	SELECT	
+		market_date,
+		total_sales,
+		RANK () OVER (ORDER BY total_sales DESC) as best_rank,
+		RANK () OVER (ORDER BY total_sales ASC) as worst_rank
+	FROM daily_sales
+)
+SELECT market_date, total_sales, "best day" AS day_type
+FROM ranking
+WHERE best_rank = 1
 
+UNION
 
+SELECT market_date, total_sales, "worst day" AS day_type
+FROM ranking
+WHERE worst_rank = 1
 
 --END QUERY
 
