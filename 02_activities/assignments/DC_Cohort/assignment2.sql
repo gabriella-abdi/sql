@@ -27,6 +27,7 @@ SELECT
 product_name || ', ' ||COALESCE( product_size, "") || ' (' ||COALESCE( product_qty_type, "unit") || ')'
 FROM product
 
+
 --END QUERY
 
 
@@ -49,6 +50,7 @@ DENSE_RANK() OVER (
 FROM customer_purchases
 WHERE market_date < '2022-04-09';
 
+
 --END QUERY
 
 
@@ -67,6 +69,7 @@ FROM(
 	FROM customer_purchases)
 WHERE visit = 1;
 
+
 --END QUERY
 
 
@@ -81,6 +84,7 @@ SELECT *,
 	COUNT(*) OVER (PARTITION BY customer_id, product_id ORDER BY market_date) AS times_purchased
 FROM customer_purchases
 WHERE market_date < '2022-04-29';
+
 
 --END QUERY
 
@@ -123,6 +127,7 @@ SELECT
 FROM product
 WHERE product_size REGEXP "[0-9]";
 
+
 --END QUERY
 
 
@@ -162,6 +167,7 @@ SELECT market_date, total_sales, "worst day" AS day_type
 FROM ranking
 WHERE worst_rank = 1
 
+
 --END QUERY
 
 
@@ -197,6 +203,10 @@ INNER JOIN product AS p ON p.product_id = vp.product_id
 GROUP BY v.vendor_name, p.product_name
 ORDER BY v.vendor_name, p.product_name;
 
+
+--END QUERY
+
+
 -- INSERT
 /*1.  Create a new table "product_units". 
 This table will contain only products where the `product_qty_type = 'unit'`. 
@@ -212,6 +222,7 @@ SELECT *,
 FROM product
 WHERE product_qty_type = "unit";
 
+
 --END QUERY
 
 
@@ -223,6 +234,7 @@ INSERT INTO product_units (product_id, product_name, product_size, product_categ
 VALUES(3, "Poblano Peppers - Organic", "large", 1, "unit", CURRENT_TIMESTAMP);
 
 SELECT * FROM product_units;
+
 
 --END QUERY
 
@@ -241,6 +253,7 @@ WHERE rowid = (
 	ORDER BY snapshot_timestamp ASC, rowid ASC
 	LIMIT 1
 );
+
 
 --END QUERY
 
@@ -275,6 +288,7 @@ SET current_quantity = COALESCE ((
 	LIMIT 1
 	), 0
 );
+
 
 --END QUERY
 
