@@ -220,7 +220,7 @@ This can be any product you desire (e.g. add another record for Apple Pie). */
 --QUERY 10
 
 INSERT INTO product_units (product_id, product_name, product_size, product_category_id, product_qty_type, snapshot_timestamp)
-VALUES(1, "Chocolate Chip Cookies", "dozen", 3, "unit", CURRENT_TIMESTAMP);
+VALUES(3, "Poblano Peppers - Organic", "large", 1, "unit", CURRENT_TIMESTAMP);
 
 SELECT * FROM product_units;
 
