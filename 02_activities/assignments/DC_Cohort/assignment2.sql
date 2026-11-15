@@ -233,8 +233,14 @@ SELECT * FROM product_units;
 HINT: If you don't specify a WHERE clause, you are going to have a bad time.*/
 --QUERY 11
 
-
-
+DELETE from product_units
+WHERE rowid = (
+	SELECT rowid 
+	FROM product_units
+	WHERE product_name  = "Poblano Peppers - Organic"
+	ORDER BY snapshot_timestamp ASC, rowid ASC
+	LIMIT 1
+);
 
 --END QUERY
 
