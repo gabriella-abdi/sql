@@ -180,11 +180,22 @@ How many customers are there (y).
 Before your final group by you should have the product of those two queries (x*y).  */
 --QUERY 8
 
+SELECT
+	v.vendor_name,
+	p.product_name,
+	SUM(vp.original_price * 5) AS total_revenue
+FROM (
+	SELECT 
+		DISTINCT vendor_id, product_id, original_price
+	FROM vendor_inventory
+) AS vp
 
+CROSS JOIN customer AS c
+INNER JOIN vendor AS v ON v.vendor_id = vp.vendor_id
+INNER JOIN product AS p ON p.product_id = vp.product_id
 
-
---END QUERY
-
+GROUP BY v.vendor_name, p.product_name
+ORDER BY v.vendor_name, p.product_name;
 
 -- INSERT
 /*1.  Create a new table "product_units". 
